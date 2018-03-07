@@ -18,7 +18,7 @@ class AnecdoteList extends React.Component {
     }, 5000);
   }
   render() {
-    const anecdotes = this.props.store.getState().anecdotes.filter(anecdote=> anecdote.content.includes(this.props.store.getState().filter))
+    const anecdotes = this.props.store.getState().anecdotes.filter(anecdote=> anecdote.content.toLowerCase().includes(this.props.store.getState().filter))
     
     
     return (

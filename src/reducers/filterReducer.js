@@ -1,6 +1,6 @@
 const filterReducer = (store = '', action) => {
     if(action.type ==='SET_FILTER'){
-        return [...store,  action.filter]
+        return [ action.filter]
     }
     return store
 }
@@ -10,6 +10,7 @@ export const filterChange = (filter) => {
         type: 'SET_FILTER',
         filter
     }
+    return filter
 }
 
 export default filterReducer
