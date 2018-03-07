@@ -1,10 +1,23 @@
 import React from 'react'
 import filterReducer, { filterChange } from '../reducers/filterReducer'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 class Filter extends React.Component {
+    componentDidMount() {
+        const { store } = this.context
+        this.unsubscribe = store.subscribe(() => 
+          this.forceUpdate()
+        )
+        }
+      
+      componentWillUnmount() {
+        this.unsubscribe()
+      }
+
     handleChange = (event) => {
       // input-kentän arvo muuttujassa event.target.value
-      this.props.store.dispatch(filterChange(event.target.value))
+      this.context.store.dispatch(filterChange(event.target.value))
     }
     render() {
       const style = {
@@ -18,5 +31,9 @@ class Filter extends React.Component {
       )
     }
   }
-  export default Filter
+  Filter.contextTypes = {
+    store: PropTypes.object
+  }
+  const ConnectedFilter = connect()(Filter)
+  export default ConnectedFilter
   
