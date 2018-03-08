@@ -10,7 +10,7 @@ export const filterChange = (filter) => {
         type: 'SET_FILTER',
         filter
     }
-    return filter
+    
 }
 
 export default filterReducer

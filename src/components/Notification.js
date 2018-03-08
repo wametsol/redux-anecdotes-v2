@@ -1,5 +1,5 @@
 import React from 'react'
-import notificationReducer from '../reducers/notificationReducer'
+import notificationReducer, { notify } from '../reducers/notificationReducer'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -34,4 +34,6 @@ Notification.contextTypes = {
 }
 const ConnectedNotification = connect()(Notification)
 
-export default ConnectedNotification
+export default connect(
+  null, {notify}
+)(ConnectedNotification)

@@ -1,3 +1,4 @@
+import anecService from '../services/anecdotes'
 const messagesAtStart = [
     ''
   ]
@@ -13,7 +14,7 @@ const messagesAtStart = [
   const initialState = messagesAtStart
   
   const notificationReducer = (store = initialState, action) => {
-    console.log(store, action);
+
     if (action.type==='CREATE_NOTI') {
         return [...store,  action.content]
       
@@ -26,6 +27,8 @@ const messagesAtStart = [
 }
 
  export const voteNoti = (content) => {
+    console.log('luodaan noti',content);
+    
     return{
         type: 'CREATE_NOTI',
          content
@@ -34,8 +37,31 @@ const messagesAtStart = [
 
  export const timesUp = (content) => {
      return{
-         type: 'EMPTY_NOTI'
+         
      }
+ }
+
+ export const notify = (content, time) => {
+     console.log("päästään tänne!", content);
+     
+     
+        
+      return async (dispatch) => {  
+          dispatch({
+            type: 'CREATE_NOTI',
+            content
+          })
+          setTimeout(() => {
+              dispatch({
+                type: 'EMPTY_NOTI'
+              })
+              
+          }, time*1000)
+        
+       
+        
+     }
+     
  }
 
 

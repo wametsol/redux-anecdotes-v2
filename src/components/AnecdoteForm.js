@@ -1,8 +1,9 @@
 import React from 'react'
 import { anecCreation } from '../reducers/anecdoteReducer'
-import { voteNoti, timesUp } from '../reducers/notificationReducer'
+import { voteNoti, timesUp, notify } from '../reducers/notificationReducer'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import anecService from '../services/anecdotes'
 
 class AnecdoteForm extends React.Component {
   componentDidMount() {
@@ -16,18 +17,19 @@ class AnecdoteForm extends React.Component {
     this.unsubscribe()
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault()
-    const anec = this.props.anecCreation(e.target.anecdote.value)
-    this.context.store.dispatch(anec)
+    const anec = e.target.anecdote.value
+    e.target.anecdote.value = ''
+    anecCreation(anec)
 
-    const message = (`you created  '${anec.content}'`)
+    const message = (`you created  '${anec}'`)
     console.log(message);
     
-    this.context.store.dispatch(voteNoti(message))
-    setTimeout(() => {
-      this.context.store.dispatch(timesUp())
-    }, 5000);
+
+   
+    this.props.notify(message, 5)
+    
   }
     
   
@@ -49,4 +51,5 @@ AnecdoteForm.contextTypes = {
 }
 const ConnectedAnecdoteForm = connect()(AnecdoteForm)
 
-export default ConnectedAnecdoteForm
+export default connect(null,
+{anecCreation, notify})(ConnectedAnecdoteForm)

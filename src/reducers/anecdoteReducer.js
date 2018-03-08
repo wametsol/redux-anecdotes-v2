@@ -1,3 +1,4 @@
+import anecService from '../services/anecdotes'
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -17,9 +18,9 @@ const asObject = (anecdote) => {
   }
 }
 
-const initialState = anecdotesAtStart.map(asObject)
+//const initialState = anecdotesAtStart.map(asObject)
 
-const anecdoteReducer = (store = initialState, action) => {
+const anecdoteReducer = (store = [], action) => {
   
   
   if (action.type==='VOTE') {
@@ -32,27 +33,43 @@ const anecdoteReducer = (store = initialState, action) => {
 
     return [...store, { content: action.content, id: action.id, votes:action.votes }]
   }
+  if (action.type === 'INIT_ANECS'){
+    
+    return action.data
+  }
 
   return store
 }
 
 export const anecVote = (content) => {
-  return {
+  return async (dispatch) => {
+    const anec = await anecService.voteAnec(content)
+    dispatch({
     type: 'VOTE',
-    id: content
+    id: anec.id
+  })
+}
+}
+export const anecInitialization = () => {
+  
+   return async (dispatch) => {
+     const anecs = await anecService.getAll()
+     dispatch({
+     type: 'INIT_ANECS',
+     data: anecs
+   })
   }
 }
 export const anecCreation = (content) => {
   
     
-  return{
-    
+  return async (dispatch) => {
+      const newAnec = await anecService.createNew(content)
+      dispatch({
       
         type: 'CREATE', 
-        content,
-        id: getId(),
-        votes:0 
-          
+        content: newAnec
+      })  
   }
 }
 

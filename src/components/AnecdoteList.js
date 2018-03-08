@@ -1,8 +1,9 @@
 import React from 'react'
 import { anecVote } from '../reducers/anecdoteReducer'
-import { voteNoti, timesUp } from '../reducers/notificationReducer'
+import { voteNoti, timesUp, notify } from '../reducers/notificationReducer'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import anecService from '../services/anecdotes'
 class AnecdoteList extends React.Component {
   componentDidMount() {
     const { store } = this.context
@@ -14,22 +15,18 @@ class AnecdoteList extends React.Component {
   componentWillUnmount() {
     this.unsubscribe()
   }
-  handleVote = (e) => {
-    console.log(e);
-    console.log(e.id);
-    const id = e.id
-    
-    
-    this.context.store.dispatch(anecVote(id))
-    
+  handleVote = async (e)  => {
+    const content = e
+    this.props.anecVote(content)
+
     const message = (`you voted '${e.content}'`)
     console.log(message);
+    this.props.notify(message, 5)
+   
     
-    this.context.store.dispatch(voteNoti(message))
-    setTimeout(() => {
-      this.context.store.dispatch(timesUp())
-    }, 5000);
+
   }
+  
   
   render() {
     const anecdotes = this.context.store.getState().anecdotes.filter(anecdote=> anecdote.content.toLowerCase().includes(this.context.store.getState().filter)).sort((a, b) => b.votes - a.votes)
@@ -61,4 +58,7 @@ AnecdoteList.contextTypes = {
 
 const ConnectedAnecdoteList = connect()(AnecdoteList)
 
-export default ConnectedAnecdoteList
+export default connect(
+  null,
+  {anecVote, notify}
+)(ConnectedAnecdoteList)
