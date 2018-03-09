@@ -1,9 +1,13 @@
 import React from 'react'
-import { anecVote } from '../reducers/anecdoteReducer'
+import { anecVote, anecdotesToShow } from '../reducers/anecdoteReducer'
 import { voteNoti, timesUp, notify } from '../reducers/notificationReducer'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import anecService from '../services/anecdotes'
+const anecsToShow = (anecs, filter) => {
+  
+  return anecs.filter(anecdote=> anecdote.content.toLowerCase().includes(filter)).sort((a, b) => b.votes - a.votes)
+}
 class AnecdoteList extends React.Component {
   componentDidMount() {
     const { store } = this.context
@@ -29,7 +33,10 @@ class AnecdoteList extends React.Component {
   
   
   render() {
-    const anecdotes = this.context.store.getState().anecdotes.filter(anecdote=> anecdote.content.toLowerCase().includes(this.context.store.getState().filter)).sort((a, b) => b.votes - a.votes)
+    const anecdotes = this.props.visibleAnecs
+    
+    console.log(anecdotes);
+    
     
     
     return (
@@ -56,9 +63,14 @@ AnecdoteList.contextTypes = {
   store: PropTypes.object
 }
 
+const mapStateToProps = (state) => {
+  return {
+    visibleAnecs : anecsToShow(state.anecdotes, state.filter)
+  }
+}
 const ConnectedAnecdoteList = connect()(AnecdoteList)
 
 export default connect(
-  null,
-  {anecVote, notify}
+  mapStateToProps,
+  {anecVote, notify, anecdotesToShow},
 )(ConnectedAnecdoteList)

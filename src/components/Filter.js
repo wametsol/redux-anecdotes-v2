@@ -19,6 +19,9 @@ class Filter extends React.Component {
       // input-kentän arvo muuttujassa event.target.value
       this.context.store.dispatch(filterChange(event.target.value))
     }
+    anecdotesToShow = () => {
+      return this.context.store.getState().anecdotes.filter(anecdote=> anecdote.content.toLowerCase().includes(this.context.store.getState().filter)).sort((a, b) => b.votes - a.votes)
+    }
     render() {
       const style = {
         marginBottom: 10
@@ -35,5 +38,6 @@ class Filter extends React.Component {
     store: PropTypes.object
   }
   const ConnectedFilter = connect()(Filter)
-  export default ConnectedFilter
+  export default connect(null)
+    (ConnectedFilter)
   

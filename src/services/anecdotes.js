@@ -25,5 +25,12 @@ const voteAnec = async (content) => {
     
     return response.data
 }
+const showFiltered = async () => {
+    var filtered = await axios.get(url)
+    console.log(filtered.data);
+    filtered = filtered.data
+    return filtered
 
-export default { getAll, createNew, voteAnec }
+}
+
+export default { getAll, createNew, voteAnec, showFiltered }

@@ -37,10 +37,23 @@ const anecdoteReducer = (store = [], action) => {
     
     return action.data
   }
+  if (action.type==='GET_ALL'){
+    return store
+  }
 
   return store
 }
-
+export const anecdotesToShow =  () => {
+ 
+    const anecs =  anecService.getAll().filter(anecdote=> anecdote.content.toLowerCase().includes(this.context.store.getState().filter)).sort((a, b) => b.votes - a.votes)
+    console.log(anecs);
+    
+    
+  
+  
+  
+  return anecs
+}
 export const anecVote = (content) => {
   return async (dispatch) => {
     const anec = await anecService.voteAnec(content)
